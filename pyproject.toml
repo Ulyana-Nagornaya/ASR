@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ASR and speaker diarization for russian audios."
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Sound/Audio :: Speech"
+]
+
+# Production
+dependencies = [
+    "openai-whisper>=20231117",        # large-v3-turbo
+    "pyannote.audio>=3.1.0",           # speaker diarization
+    "torch>=2.1.0",                    # pyannote требует >=2.1
+    "torchaudio>=2.1.0",
+    "ffmpeg-python>=0.2.0",            # конвертация MP4→WAV
+    "librosa>=0.10.0",                 # альтернатива для загрузки аудио
+]
+
+# Dev
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1.0",                     # линтер (быстрее pylint/flake8)
+    "mypy>=1.5",                       # статическая типизация
+    "jupyter>=1.0",                    # для notebooks/
+    "ipywidgets>=8.0",                 # прогресс-бары в Colab
+]
+
+[project.urls]
+
+
+# Tools

@@ -38,10 +38,7 @@ class SpeakerDiarization:
     segments: List[AudioSegment]
     num_speakers: int = -1
 
-    # TODO: отсортировать сегменты по start и 
-        #   2. собрать уникальные speaker (игнорируя None)
-        #   3. установить self.num_speakers = len(уникальных)
-        #   → использовать object.__setattr__(self, 'num_speakers', value), чтобы избежать рекурсии
+    # TODO: отсортировать сегменты по start и установить уникальных спикеров
     
 @dataclass
 class AlignedTranscript:
