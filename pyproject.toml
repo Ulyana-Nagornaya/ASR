@@ -1,38 +1,39 @@
 [build-system]
-requires = ["poetry-core==2.2.1"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 package-mode = true
-packages = [{ include = "asr_diarization", from = "src" }]
+packages = [{ include = 'asr_diarization', from = 'src' }]
 
 [project]
 name = "asr_diarization"
 version = "1.0.0"
-authors = [
-  { name="Ulyana-Nagornaya", email="ulyana.nagornaya@gmail.com" },
-]
 description = "ASR and speaker diarization for Russian audio using Whisper and pyannote.audio"
-requires-python = ">=3.9"
 readme = "README.md"
-requires-python = '>=3.10,<=3.14'
+authors = ["Ulyana Nagornaya"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.14"
-openai-whisper = ">=20231117"  # large-v3-turbo
-pyannote-audio = ">=3.1.0"   # speaker diarization
-torch = ">=2.1.0"  # pyannote требует >=2.1
+openai-whisper = ">=20231117"      # large-v3-turbo
+pyannote-audio = ">=3.1.0"         # speaker diarization
+torch = ">=2.1.0"                  # pyannote требует >=2.1
 torchaudio = ">=2.1.0"
-librosa = ">=0.10.0"
+ffmpeg-python = ">=0.2.0"          # конвертация MP4→WAV
+librosa = ">=0.10.0"               # альтернатива для загрузки аудио
 
-[dependency-groups]
-test = ['pytest==9.0.1']
-dev = ['ruff==0.14.0', 'pre-commit==4.3.0', 'tomli==2.3.0', 'build==1.3.0']
+[tool.poetry.group.dev.dependencies] # --with dev
+ruff = ">=0.1.0"                   # линтер 
+mypy = ">=1.5"                     # статическая типизация
+jupyter = ">=1.0"                  # для notebooks/
+
+[tool.poetry.group.test.dependencies] #  --with test
+pytest = ">=7.0"
 
 [tool.ruff]
-line-length = 120  # максимальная длина строки кода
-target-version = 'py310'  # версия Python - позволяет Ruff игнорировать синтаксис, которого нет в этой версии
-exclude = ['**/tests/**', '**/2_lesson/**', '**/3_lesson/**']  # папки или файлы, которые Ruff не будет проверять
+line-length = 120
+target-version = 'py310'
+exclude = ['**/tests/**', '**/notebooks/**']
 
 [tool.ruff.format]
 quote-style = 'single'  # форматер Ruff будет приводить строки к одинарным кавычкам '...' вместо двойных "..."
