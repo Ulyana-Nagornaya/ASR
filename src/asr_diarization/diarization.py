@@ -1,5 +1,5 @@
-from typing import Optional
 from .data import SpeakerDiarization
+
 
 class PyannoteDiarizer:
     """
@@ -7,9 +7,9 @@ class PyannoteDiarizer:
     """
     def __init__(
         self,
-        model_name: str = "pyannote/speaker-diarization-3.1",
+        model_name: str = 'pyannote/speaker-diarization-3.1',
         auth_token: str = None,
-        device: str = "cuda"
+        device: str = 'cuda'
     ):
         """
         Инициализирует диаризатор.

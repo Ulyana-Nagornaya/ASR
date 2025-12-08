@@ -1,5 +1,5 @@
-from typing import List
-from .data import Transcript, SpeakerDiarization, AlignedTranscript, AudioSegment
+from .data import AlignedTranscript, SpeakerDiarization, Transcript
+
 
 class SpeakerAligner:
     """

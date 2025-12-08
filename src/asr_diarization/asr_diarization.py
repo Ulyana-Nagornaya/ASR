@@ -1,8 +1,7 @@
-from typing import Dict, Optional
-from .asr import WhisperASR
-from .diarization import PyannoteDiarizer
-from .aligner import SpeakerAligner
+from typing import Dict
+
 from .data import AlignedTranscript
+
 
 class SeminarASRPipeline:
     """
@@ -13,10 +12,10 @@ class SeminarASRPipeline:
     """
     def __init__(
         self,
-        asr_model: str = "large-v3-turbo",
-        diarization_model: str = "pyannote/speaker-diarization-3.1",
+        asr_model: str = 'large-v3-turbo',
+        diarization_model: str = 'pyannote/speaker-diarization-3.1',
         hf_token: str = None,
-        device: str = "cuda"
+        device: str = 'cuda'
     ):
         """
         Инициализирует компоненты пайплайна.

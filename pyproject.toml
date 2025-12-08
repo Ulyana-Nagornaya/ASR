@@ -1,39 +1,36 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.4.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
-package-mode = true
-packages = [{ include = 'asr_diarization', from = 'src' }]
-
 [project]
-name = "asr_diarization"
+name = "text-analyzer"
 version = "1.0.0"
-description = "ASR and speaker diarization for Russian audio using Whisper and pyannote.audio"
+description = "Russian text analyzer with linguistic features"
+authors = [{name = "Ulyana Nagornaya", email = "ulyana@mail.com"}]
 readme = "README.md"
-authors = ["Ulyana Nagornaya"]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "spacy>=3.7.0",
+    "pydantic>=2.0",
+    "razdel (>=0.5.0,<0.6.0)",
+]
+model = [
+    "ru-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.14"
-openai-whisper = ">=20231117"      # large-v3-turbo
-pyannote-audio = ">=3.1.0"         # speaker diarization
-torch = ">=2.1.0"                  # pyannote требует >=2.1
-torchaudio = ">=2.1.0"
-ffmpeg-python = ">=0.2.0"          # конвертация MP4→WAV
-librosa = ">=0.10.0"               # альтернатива для загрузки аудио
+[project.optional-dependencies] #--extras
+api = [
+    "fastapi>=0.100",
+    "uvicorn[standard]>=0.23",
+]
 
-[tool.poetry.group.dev.dependencies] # --with dev
-ruff = ">=0.1.0"                   # линтер 
-mypy = ">=1.5"                     # статическая типизация
-jupyter = ">=1.0"                  # для notebooks/
-
-[tool.poetry.group.test.dependencies] #  --with test
-pytest = ">=7.0"
+dev = ["ruff>=0.1.0", "mypy>=1.5"]
+test = ["pytest>=7.0"]
 
 [tool.ruff]
-line-length = 120
-target-version = 'py310'
-exclude = ['**/tests/**', '**/notebooks/**']
+line-length = 120  # максимальная длина строки кода
+target-version = 'py310'  # версия Python - позволяет Ruff игнорировать синтаксис, которого нет в этой версии
+exclude = ['**/tests/**', '**/2_lesson/**', '**/3_lesson/**']  # папки или файлы, которые Ruff не будет проверять
 
 [tool.ruff.format]
 quote-style = 'single'  # форматер Ruff будет приводить строки к одинарным кавычкам '...' вместо двойных "..."

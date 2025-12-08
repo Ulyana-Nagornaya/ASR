@@ -1,5 +1,5 @@
-from typing import Optional
 from .data import Transcript
+
 
 class WhisperASR:
     """
@@ -7,9 +7,9 @@ class WhisperASR:
     """
     def __init__(
         self,
-        model_name: str = "large-v3-turbo",
-        device: str = "cuda",
-        language: str = "ru"
+        model_name: str = 'large-v3-turbo',
+        device: str = 'cuda',
+        language: str = 'ru'
     ):
         """
         Инициализирует модель Whisper.

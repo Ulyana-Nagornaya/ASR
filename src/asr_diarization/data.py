@@ -1,6 +1,6 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List, Optional, Set
-from collections import defaultdict
+
 
 class AudioSegment:
     """
@@ -26,7 +26,7 @@ class Transcript:
     Результат ASR: текстовые сегменты
     """
     segments: List[AudioSegment]
-    language: str = "ru"
+    language: str = 'ru'
 
     # TODO: отсортировать сегменты по start и проверить пересечения
 
@@ -39,7 +39,7 @@ class SpeakerDiarization:
     num_speakers: int = -1
 
     # TODO: отсортировать сегменты по start и установить уникальных спикеров
-    
+
 @dataclass
 class AlignedTranscript:
     """
@@ -51,7 +51,7 @@ class AlignedTranscript:
     def speakers(self) -> Set[str]:
         # TODO: вернуть множество всех спикеров
         pass
-    
+
     def to_json(self) -> dict:
         # TODO: собрать список словарей и вернуть json
         pass
