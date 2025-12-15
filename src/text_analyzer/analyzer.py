@@ -1,9 +1,8 @@
 import logging
-
-from typing import List
+from typing import List, Set
 
 from .preprocessor import Preprocessor
-from .constants import QUESTION_WORDS_PATH
+from .constants import INTERROGATIVE_WORDS_PATH
 
 from .data_models import SentenceResult
 
@@ -11,16 +10,41 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 class TextAnalyzer(Preprocessor):
-    def __init__(self,  text: str):
-        super().__init__(text)
-        self.results = [] 
+    """
+    Text analyzer for russian texts.
+    """
+    def __init__(self, text: str) -> None:
+        """
+        Initialize Analyzer and create SentenceResult.
 
+        Args:
+            text: Raw text for analyzing.
+        """
+        super().__init__(text)
         self.results: List[SentenceResult] = [
             SentenceResult(id=i, text=sent)
             for i, sent in enumerate(self.sentences, start=1)
         ]
+        logger.info("TextAnalyzer is ready")
 
-    def find_imperatives(self, pos='VERB', tag_name='Mood', tag_value='Imp'):
+
+    def find_imperatives(
+        self,
+        pos: str = "VERB",
+        tag_name: str = "Mood",
+        tag_value: str = "Imp"
+    ) -> List[SentenceResult]:
+        """
+        Extract imperatives.
+
+        Args:
+            pos: pos tag ("VERB" by default).
+            tag_name: name of morphological feature ("Mood" by default).
+            tag_value: value of the feature ("Imp" by default).
+
+        Returns:
+            TextAnalyzer's results with extracted imperatives for each sentence.
+        """
         features = {'tokens': ['text', 'pos','morph','span']}
         for result in self.results:
             data = self.spacy_extract(result.text, features)
@@ -32,7 +56,13 @@ class TextAnalyzer(Preprocessor):
         logger.info("Imperatives were extracted from the text")
         return self.results
 
-    def find_persons(self):
+    def find_persons(self) -> List[SentenceResult]:
+        """
+        Extract personal names.
+
+        Returns:
+            TextAnalyzer's results with extracted personal names for each sentence.
+        """
         features = {'ents': ['text', 'label', 'span']}
         for result in self.results:
             data = self.spacy_extract(result.text, features)
@@ -41,22 +71,33 @@ class TextAnalyzer(Preprocessor):
                 if e['label'] in ['PER', 'PERSON']:
                     persons[e['text']] = e['span']
             result.persons = persons
-        logger.info("Name of the persons were extracted from the text")
+        logger.info("Personal names were extracted from the text")
         return self.results
 
-    def load_question_words(self):
+    def load_interrogative_words(self) -> Set[str]:
+        """
+        Load the list of interrogative words.
+
+        Returns:
+            Set of interrogative words.
+        """
         try:
-            if QUESTION_WORDS_PATH is None or (QUESTION_WORDS_PATH and not QUESTION_WORDS_PATH.exists()):
-                raise FileNotFoundError(f"Question words file not found: {QUESTION_WORDS_PATH}")
-            with open(QUESTION_WORDS_PATH, 'r', encoding='utf-8') as f:
-                question_words = set(f.read().split(', '))
-                return question_words
+            if INTERROGATIVE_WORDS_PATH is None or (INTERROGATIVE_WORDS_PATH and not INTERROGATIVE_WORDS_PATH.exists()):
+                raise FileNotFoundError(f"Question words file not found: {INTERROGATIVE_WORDS_PATH}")
+            with open(INTERROGATIVE_WORDS_PATH, 'r', encoding='utf-8') as f:
+                interrogative_words = set(f.read().split(', '))
+                return interrogative_words
         except(OSError, UnicodeDecodeError) as e:
             logger.error("Failed to load question words: %s", e)
 
-    def detect_questions(self):
-        # Леммы!
-        question_words = self.load_question_words()
+    def detect_questions(self) -> List[SentenceResult]:
+        """
+        Detect types of questions (general or special).
+
+        Returns:
+            TextAnalyzer's results with extracted question types.
+        """
+        question_words = self.load_interrogative_words()
         features = {'tokens': ['text']}
         for result in self.results:
             data = self.spacy_extract(result.text, features)

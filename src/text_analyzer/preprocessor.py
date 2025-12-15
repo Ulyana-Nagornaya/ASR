@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List
 
 import razdel
 import spacy
@@ -9,7 +9,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 class Preprocessor:
-    def __init__(self, text):
+    def __init__(self, text: str) -> None:
+        """
+        Initialize Preprocessor for TextAnalyzer
+
+        Args:
+            text: Raw text.
+        """
         if not isinstance(text, str):
             raise TypeError(f"Expected string, got {type(text)}")
         self.text = text
@@ -28,7 +34,18 @@ class Preprocessor:
             except:
                 logger.error("Failed to load spacy model. Install it: python -m spacy download ru_core_news_lg")
 
-    def spacy_extract(self, sentence, features):
+    def spacy_extract(self, sentence: str, features: Dict[str, List[str]]) -> Dict[str, Any]:
+        """
+        Extract tokens and entities using spaCy.
+
+        Args:
+            sentence: Sentences from the raw text.
+            features: Dict of required features for tokens and entities.
+                      For example: {"tokens": ["text", "pos", "span"], "ents": ["text", "span"]}
+
+        Returns:
+            Dict with "tokens" and "ents" features.
+        """
         try:
             doc = self._spacy_model(sentence)
         except Exception as e:
@@ -37,7 +54,6 @@ class Preprocessor:
         
         out = {}
 
-        # Токены
         if 'tokens' in features and features['tokens']:
             out['tokens'] = []
             requested = features['tokens']
@@ -55,7 +71,6 @@ class Preprocessor:
                     t['morph'] = token.morph.to_dict()
                 out['tokens'].append(t)
 
-        # Сущности
         if 'ents' in features and features['ents']:
             out['ents'] = []
             requested = features['ents']
