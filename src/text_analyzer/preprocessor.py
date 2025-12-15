@@ -66,7 +66,7 @@ class Preprocessor:
                 if 'label' in requested:
                     e['label'] = ent.label_
                 if 'span' in requested:
-                    e['span'] = tuple([ent.start_char, ent.end_char])
+                    e['span'] = (ent.start_char, ent.end_char)
                 out['ents'].append(e)
 
         return out
