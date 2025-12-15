@@ -1,9 +1,9 @@
-from .preprocessor import Preprocessor
 from .analyzer import TextAnalyzer
 from .constants import INTERROGATIVE_WORDS_PATH
+from .preprocessor import Preprocessor
 
 __all__ = [
-    "Preprocessor",
-    "TextAnalyzer",
-    "INTERROGATIVE_WORDS_PATH",
+    'INTERROGATIVE_WORDS_PATH',
+    'Preprocessor',
+    'TextAnalyzer',
 ]

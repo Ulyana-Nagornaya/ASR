@@ -1,5 +1,7 @@
-from typing import Dict, Tuple, Optional
+from typing import Dict, Optional, Tuple
+
 from pydantic import BaseModel
+
 
 class SentenceResult(BaseModel):
     """

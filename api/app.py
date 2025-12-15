@@ -1,20 +1,21 @@
 from fastapi import FastAPI
-from  text_analyzer import TextAnalyzer
+
+from text_analyzer import TextAnalyzer
 
 app = FastAPI()
 
-@app.get("/")
+@app.get('/')
 async def read_root():
-    return {"message": "Speech Analyzer API"}
+    return {'message': 'Speech Analyzer API'}
 
-@app.post("/analyze")
+@app.post('/analyze')
 async def analyze_text(text: str):
     analyzer = TextAnalyzer(text)
     analyzer.find_imperatives()
     analyzer.find_persons()
     analyzer.detect_questions()
-    
-    return {"result": analyzer.results}
+
+    return {'result': analyzer.results}
 
 """
 curl -X POST "http://127.0.0.1:8000/user" \

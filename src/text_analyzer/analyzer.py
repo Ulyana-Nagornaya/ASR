@@ -1,10 +1,9 @@
 import logging
 from typing import List, Set
 
-from .preprocessor import Preprocessor
 from .constants import INTERROGATIVE_WORDS_PATH
-
 from .data_models import SentenceResult
+from .preprocessor import Preprocessor
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
@@ -25,14 +24,14 @@ class TextAnalyzer(Preprocessor):
             SentenceResult(id=i, text=sent)
             for i, sent in enumerate(self.sentences, start=1)
         ]
-        logger.info("TextAnalyzer is ready")
+        logger.info('TextAnalyzer is ready')
 
 
     def find_imperatives(
         self,
-        pos: str = "VERB",
-        tag_name: str = "Mood",
-        tag_value: str = "Imp"
+        pos: str = 'VERB',
+        tag_name: str = 'Mood',
+        tag_value: str = 'Imp'
     ) -> List[SentenceResult]:
         """
         Extract imperatives.
@@ -52,8 +51,8 @@ class TextAnalyzer(Preprocessor):
             for t in data['tokens']:
                 if t['pos'] == pos and t['morph'].get(tag_name) == tag_value:
                     imperatives[t['text']] = t['span']
-            result.imperatives = imperatives 
-        logger.info("Imperatives were extracted from the text")
+            result.imperatives = imperatives
+        logger.info('Imperatives were extracted from the text')
         return self.results
 
     def find_persons(self) -> List[SentenceResult]:
@@ -71,7 +70,7 @@ class TextAnalyzer(Preprocessor):
                 if e['label'] in ['PER', 'PERSON']:
                     persons[e['text']] = e['span']
             result.persons = persons
-        logger.info("Personal names were extracted from the text")
+        logger.info('Personal names were extracted from the text')
         return self.results
 
     def load_interrogative_words(self) -> Set[str]:
@@ -83,12 +82,11 @@ class TextAnalyzer(Preprocessor):
         """
         try:
             if INTERROGATIVE_WORDS_PATH is None or (INTERROGATIVE_WORDS_PATH and not INTERROGATIVE_WORDS_PATH.exists()):
-                raise FileNotFoundError(f"Question words file not found: {INTERROGATIVE_WORDS_PATH}")
+                raise FileNotFoundError(f'Question words file not found: {INTERROGATIVE_WORDS_PATH}')
             with open(INTERROGATIVE_WORDS_PATH, 'r', encoding='utf-8') as f:
-                interrogative_words = set(f.read().split(', '))
-                return interrogative_words
+                return set(f.read().split(', '))
         except(OSError, UnicodeDecodeError) as e:
-            logger.error("Failed to load question words: %s", e)
+            logger.error('Failed to load question words: %s', e)
 
     def detect_questions(self) -> List[SentenceResult]:
         """
@@ -105,8 +103,8 @@ class TextAnalyzer(Preprocessor):
             is_general = '?' in result.text
             is_specific = bool(found) and is_general
             result.is_question = {
-                "general question": is_general,
-                "specific question": is_specific
+                'general question': is_general,
+                'specific question': is_specific
             }
-        logger.info("Questions were extracted from the text")
+        logger.info('Questions were extracted from the text')
         return self.results
