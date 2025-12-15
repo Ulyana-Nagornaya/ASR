@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from  text_analyzer import Text_Analyzer
+from  text_analyzer import TextAnalyzer
 
 app = FastAPI()
 
@@ -9,16 +9,12 @@ async def read_root():
 
 @app.post("/analyze")
 async def analyze_text(text: str):
-    analyzer = Text_Analyzer(text)
+    analyzer = TextAnalyzer(text)
     analyzer.find_imperatives()
     analyzer.find_persons()
     analyzer.detect_questions()
     
     return {"result": analyzer.results}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
 
 """
 curl -X POST "http://127.0.0.1:8000/user" \

@@ -1,75 +1,56 @@
 [build-system]
-requires = ["poetry-core>=1.4.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "text-analyzer"
 version = "1.0.0"
 description = "Russian text analyzer with linguistic features"
-authors = [{name = "Ulyana Nagornaya", email = "ulyana@mail.com"}]
-readme = "README.md"
-requires-python = ">=3.10,<3.14"
-dependencies = [
-    "spacy>=3.7.0",
-    "pydantic>=2.0",
-    "razdel (>=0.5.0,<0.6.0)",
-]
-model = [
-    "ru-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl",
-]
+authors = ["Apple"]
+packages = [{ include = "text_analyzer", from = "src" }]
 
-[project.optional-dependencies] #--extras
-api = [
-    "fastapi>=0.100",
-    "uvicorn[standard]>=0.23",
-]
 
-dev = ["ruff>=0.1.0", "mypy>=1.5"]
-test = ["pytest>=7.0"]
+[tool.poetry.dependencies]
+python = ">=3.10,<3.14"
+spacy = ">=3.7.0"
+pydantic = ">=2.0"
+razdel = ">=0.5.0,<0.6.0"
+ru-core-news-lg = { url = "https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl" }
+
+[tool.poetry.group.api.dependencies]
+fastapi = ">=0.100"
+uvicorn = { version = ">=0.23", extras = ["standard"] }
+
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.1.0"
+mypy = ">=1.5"
+
+[tool.poetry.group.test.dependencies]
+pytest = ">=7.0"
 
 [tool.ruff]
-line-length = 120  # максимальная длина строки кода
-target-version = 'py310'  # версия Python - позволяет Ruff игнорировать синтаксис, которого нет в этой версии
-exclude = ['**/tests/**', '**/2_lesson/**', '**/3_lesson/**']  # папки или файлы, которые Ruff не будет проверять
+line-length = 120
+target-version = 'py310'
+exclude = ['**/tests/**', '**notebooks**']
 
 [tool.ruff.format]
-quote-style = 'single'  # форматер Ruff будет приводить строки к одинарным кавычкам '...' вместо двойных "..."
+quote-style = 'single'
 
 [tool.ruff.lint]
-# все правила - https://docs.astral.sh/ruff/rules/
 select = [
-    'E',  # ошибки стиля кода по стандарту PEP8
-    'F',  # статический анализ кода (Pyflakes), поиск логических ошибок (например, импортирован модуль, но не используется)
-    'I',  # проверка сортировки и группировки импортов (через isort)
-    'W',  # предупреждения PEP8, не критичные
-    'C',  # контроль сложности функций
-#    'T',  # проверка типов и аннотаций
-#    'D',  # проверка документации
-    'N',  # PEP8 naming convetions
-    'G',  # flake8-logging-format
-    'Q',  # flake8-quotes
-    'RSE',  # flake8-raise
-    'RET',  # flake8-return
-    'SLF',  # flake8-self
-    'SIM',  # flake8-simplify
-    'TID',  # flake8-tidy-imports
-    'TC',  # flake8-type-checking
-    'INT',  # flake8-gettext
-    'ARG',  # flake8-unused-arguments
-    'PL',  # Pylint
-    'NPY',  # NumPy-specific rules
-    'FAST',  # FastAPI
-    'RUF',  # Ruff-specific rules
+    'E', 'F', 'I', 'W', 'C',
+    'N', 'G', 'Q', 'RSE', 'RET', 'SLF', 'SIM',
+    'TID', 'TC', 'INT', 'ARG', 'PL', 'NPY',
+    'FAST', 'RUF',
 ]
 ignore = [
-    'D100',  # Необходимость документации для всех публичных модулей
-    'D104',  # Необходимость документации для всех публичных пакетов
-    'G004',  # Запрет на использование f-строк в логировании
-    'RUF001', 'RUF002', 'RUF003',   # Запрет на использование неоднозначных символов в комментариях (конфликт с русским языком)
+    'D100', 'D104',
+    'G004',
+    'RUF001', 'RUF002', 'RUF003',
 ]
 
 [tool.ruff.lint.pydocstyle]
-convention = 'pep257'  # использовать стандарт PEP 257 для docstring
+convention = 'pep257'
 
 [tool.ruff.lint.flake8-quotes]
-inline-quotes = 'single'  # линтер Ruff будет приводить строки к одинарным кавычкам '...' вместо двойных "..."
+inline-quotes = 'single'

@@ -1,3 +1,9 @@
-from .text_analyzer import TextAnalyzer
 from .preprocessor import Preprocessor
-__all__ = ["TextAnalyzer", "Preprocessor"]
+from .analyzer import TextAnalyzer
+from .constants import QUESTION_WORDS_PATH
+
+__all__ = [
+    "Preprocessor",
+    "TextAnalyzer",
+    "QUESTION_WORDS_PATH",
+]

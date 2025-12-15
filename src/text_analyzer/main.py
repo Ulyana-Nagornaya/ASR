@@ -1,11 +1,14 @@
-from text_analyzer import Text_Analyzer
-from constants import DATA_PATH, EXAMPLE_PATH
+from pathlib import Path
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+EXAMPLE_PATH = PROJECT_ROOT / 'assets' / 'data' / 'example.txt'
+
+from text_analyzer.analyzer import TextAnalyzer
 
 def main():
     with open(EXAMPLE_PATH, 'r', encoding='utf-8') as f:
         data = f.read()
 
-    text = Text_Analyzer(data)
+    text = TextAnalyzer(data)
 
     text.find_imperatives()
     text.find_persons()
