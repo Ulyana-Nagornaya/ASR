@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 name = "text-analyzer"
 version = "1.0.0"
 description = "Russian text analyzer with linguistic features"
-authors = ["Apple"]
+authors = ["Ulyana Nagornaya"]
 packages = [{ include = "text_analyzer", from = "src" }]
 
 

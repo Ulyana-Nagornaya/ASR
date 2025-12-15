@@ -1,9 +1,12 @@
 from typing import Dict, Tuple, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 class SentenceResult(BaseModel):
+    """
+    Results of text analyzing for each sentence.
+    """
     id: int
     text: str
-    persons: Dict[str, Tuple[int, int]] = Field(default_factory=dict)
-    imperatives: Dict[str, Tuple[int, int]] = Field(default_factory=dict)
+    persons: Optional[Dict[str, Tuple[int, int]]] = None
+    imperatives: Optional[Dict[str, Tuple[int, int]]] = None
     is_question: Optional[Dict[str, bool]] = None
