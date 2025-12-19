@@ -1,56 +1,98 @@
 [build-system]
-requires = ["poetry-core>=2.0.0"]
+requires = ["poetry-core>=2.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "text-analyzer"
 version = "1.0.0"
+authors = [{name = "Ulyana Nagornaya"}]
 description = "Russian text analyzer with linguistic features"
-authors = ["Ulyana Nagornaya"]
 packages = [{ include = "text_analyzer", from = "src" }]
 
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.14"
-spacy = ">=3.7.0"
-pydantic = ">=2.0"
-razdel = ">=0.5.0,<0.6.0"
+python = '>=3.11,<=3.14'
+spacy = "==3.7.5"
+pydantic = "==2.12.5"
+razdel = "==0.5.0"
 ru-core-news-lg = { url = "https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl" }
 
 [tool.poetry.group.api.dependencies]
-fastapi = ">=0.100"
-uvicorn = { version = ">=0.23", extras = ["standard"] }
+fastapi = "==0.125.0"
+uvicorn = { version = "==0.38.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
-ruff = ">=0.1.0"
-mypy = ">=1.5"
+ruff = "==0.14.10"
+mypy = "==1.19.1"
 
 [tool.poetry.group.test.dependencies]
-pytest = ">=7.0"
+pytest = "==9.0.2"
 
 [tool.ruff]
 line-length = 120
-target-version = 'py310'
-exclude = ['**/tests/**', '**notebooks**']
+exclude = ['**/tests/**']
 
+# ruff format .
 [tool.ruff.format]
-quote-style = 'single'
+quote-style = 'double'
 
+# ruff check
 [tool.ruff.lint]
 select = [
-    'E', 'F', 'I', 'W', 'C',
-    'N', 'G', 'Q', 'RSE', 'RET', 'SLF', 'SIM',
-    'TID', 'TC', 'INT', 'ARG', 'PL', 'NPY',
-    'FAST', 'RUF',
+    'F',    # Ошибки синтаксиса и выполнения (SyntaxError, NameError)
+    'E',    # Стилевые ошибки по PEP 8 (отступы, пробелы вокруг операторов)
+    'W',    # Предупреждения по PEP 8 (менее строгие, чем 'E' — например, избыточные пробелы)
+    'I',    # Контроль порядка и группировки импортов (isort)
+    'N',    # Именование: соответствие PEP 8 (snake_case, PascalCase и т.д.)
+    'D',    # Docstring: наличие, формат, содержание (PEP 257)
+    'C',    # Сложность кода: цикломатическая сложность, длина функций/классов
+    'T',    # Типизация: устаревшие аннотации, избыточные `# type: ignore`
+    'UP',   # Обновления: устаревшие конструкции, deprecated API (например, `.iteritems()`)
+    'YTT',  # Pytest: плохие практики (assert в лямбде, пустые тесты и т.д.)
+    'ANN',  # Аннотации типов: отсутствие/избыток, `Any`, `object` вместо `Any`
+    'ASYNC',# Асинхронный код: await вне async, небезопасные вызовы в async-контексте
+    'S',    # Безопасность: использование `shell=True` в subprocess, `eval`, `pickle`, etc
+    'B',    # Встроенные ловушки: использование запрещённых/небезопасных встроенных функций (напр., `pickle`)
+    'A',    # Использование `assert` вне тестов
+    'COM',  # Комментарии: оформление, trailing whitespace, недостающие пробелы после `#`
+    'C4',   # Коллекции: упрощение (например, `{}` → `set()`, `[x for x in y]` → `list(y)`)
+    'ISC',  # Импорты: избыточные/непрямые импорты (например, `import os.path` → `from os import path`)
+    'ICN',  # Имена констант: UPPER_SNAKE_CASE для глобальных констант
+    'LOG',  # Логирование: использование `f-string` в логах (опасно при lazy-eval), `%`-форматирование
+    'G',    # Логгирование с f-строками: потенциальные утечки данных или производительности
+    'INP',  # Инициализация проекта: требования к `__init__.py`, дубли импортов в пакетах
+    'PIE',  # Pythonic idioms: избыточные конструкции (напр., `len(x) == 0` → `not x`)
+    'T20',  # Печать в prod: `print`, `pprint` вне `__main__` или тестов
+    'PYI',  # Stub-файлы (.pyi): ошибки оформления, недопустимые конструкции в stubs
+    'Q',    # Кавычки: несоответствие стилю (одинарные/двойные) — управляется отдельно в линтере
+    'RSE',  # Исключения: `raise NotImplemented` вместо `NotImplementedError` и др.
+    'RET',  # Возвраты: избыточные `return None`, непоследовательные возвраты
+    'SLF',  # Self: неправильное использование `self` (имя, отсутствие в методе, shadowing)
+    'SIM',  # Упрощение: дублирующие условия, избыточные `else`, `if x: return True; else: return False`
+    'TID',  # Чистота кода: TODO/FIXME без пояснений, комментарии-заглушки
+    'TC',   # Типовые контракты: нарушения `@overload`, `TypedDict`, `Protocol`
+    'INT',  # Магические числа: использование чисел без именованных констант
+    'ARG',  # Аргументы функций: избыточные, позиционные после keyword-only
+    'PL',   # Pylint-подобные правила: проверки, имитирующие популярные правила Pylint
+    'FLY',  # Flynt: предложения по замене `%`/`.format()` на f-строки
+    'NPY',  # NumPy: устаревшие/небезопасные вызовы (например, `np.bool` → `bool`)
+    'FAST', # Быстрые исправления: лёгкие, безопасные автофиксы (часто без риска breakage)
+    'PERF', # Производительность: неоптимальные конструкции (`.append` в цикле → listcomp и др.)
+    'FURB', # "Furbol" — современные улучшения (PEP 604 `|`, `math.nextafter`, `pathlib` и др.)
+    'RUF',  # Ruff-specific: экспериментальные правила (оптимизации, security, refactoring)
 ]
 ignore = [
-    'D100', 'D104',
-    'G004',
-    'RUF001', 'RUF002', 'RUF003',
+    'D100', # "Missing docstring in public module" — не требуем docstring в каждом модуле
+    'D104', # "Missing docstring in public package" — аналогично для пакетов
+    'G004', # "f-string в логах" 
+    'RUF001', # "ambiguous-unicode-character-string" — ложные срабатывания на кириллице/эмодзи
+    'RUF002', # "ambiguous-unicode-character-docstring" — то же для docstring
+    'RUF003', # "ambiguous-unicode-character-comment" — то же для комментариев
+    'COM812', # "missing-trailing-comma"
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = 'pep257'
 
 [tool.ruff.lint.flake8-quotes]
-inline-quotes = 'single'
+inline-quotes = 'double'
