@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import List, Set
 
 from .constants import INTERROGATIVE_WORDS_PATH
@@ -19,6 +20,9 @@ class TextAnalyzer(Preprocessor):
         Args:
             text: Raw text for analyzing.
         """
+        if not text or not re.search(r"\S", text):
+            raise ValueError("Text is empty or whitespace only")
+        
         super().__init__(text)
         self.results: List[SentenceResult] = [
             SentenceResult(id=i, text=sent)
