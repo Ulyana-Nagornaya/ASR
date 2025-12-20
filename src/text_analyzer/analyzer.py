@@ -10,9 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class TextAnalyzer(Preprocessor):
-    """
-    Text analyzer for russian texts.
-    """
+    """Text analyzer for russian texts."""
 
     def __init__(self, text: str) -> None:
         """

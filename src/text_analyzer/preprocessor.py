@@ -3,15 +3,18 @@ from typing import Any
 
 import razdel
 import spacy
+from spacy.tokens import Doc
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 class Preprocessor:
+    """Preprocessor for russian texts."""
+
     def __init__(self, text: str) -> None:
         """
-        Initialize Preprocessor for TextAnalyzer
+        Initialize Preprocessor for TextAnalyzer.
 
         Args:
             text: Raw text.
@@ -61,7 +64,7 @@ class Preprocessor:
 
         return out
 
-    def _extract_tokens(self, doc, requested: list[str]) -> list[dict[str, Any]]:
+    def _extract_tokens(self, doc: Doc, requested: list[str]) -> list[dict[str, Any]]:
         """
         Extract token-level features from a spaCy Doc.
 
@@ -86,7 +89,7 @@ class Preprocessor:
             tokens.append(t)
         return tokens
 
-    def _extract_entities(self, doc, requested: list[str]) -> list[dict[str, Any]]:
+    def _extract_entities(self, doc: Doc, requested: list[str]) -> list[dict[str, Any]]:
         """
         Extract entity-level features from a spaCy Doc.
 
