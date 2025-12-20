@@ -22,6 +22,7 @@ fastapi = "==0.125.0"
 uvicorn = { version = "==0.38.0", extras = ["standard"] }
 
 [tool.poetry.group.dev.dependencies]
+pre-commit = "==4.5.0" # poetry run pre-commit install
 ruff = "==0.14.10"
 mypy = "==1.19.1"
 
