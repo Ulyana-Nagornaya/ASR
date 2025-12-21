@@ -1,35 +1,43 @@
 [build-system]
-requires = ["poetry-core>=2.0"]
+requires = ["poetry-core>=2.0"]  # Версию Poetry можно тоже следовало уточнить. Например, `2.2.1` сейчас последняя.
 build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "text-analyzer"
 version = "1.0.0"
-authors = [{name = "Ulyana Nagornaya"}]
+authors = [{name = "Ulyana Nagornaya"}]  # Лучше дописать почту, чтобы в метаинформации дистрибутива автор корректно парсился
 description = "Russian text analyzer with linguistic features"
+# Для Poetry 2 путь к пакету нужно указывать в `tool.poetry.packages`. Так, как у вас, тоже будет работать, но это оформление в любой момент может перестать поддержтиваться.
 packages = [{ include = "text_analyzer", from = "src" }]
 
+# Не вижу блока `tool.poetry`. Если вы планировали собирать пакет, то его нужно заполнить:
+# - `requires-python` - версия питона
+# - `package-mode` - активация сборки пакета
+# - `packages` - путь к пакету (у вас это указано, но не в том блоке)
 
 [tool.poetry.dependencies]
+# Для Poetry 2 версию Python нужно указывать в `tool.poetry.requires-python`. Так, как у вас, тоже будет работать, но это оформление в любой момент может перестать поддержтиваться.
+# Лучше версию Python тоже фиксировать строго. Например, `==3.12.*` - что означает "версия 3.12 с любой патч версией".
+# Раз уж вы выбрали использовать двойные кавички, то и здесь следовало использовать их.
 python = '>=3.11,<=3.14'
 spacy = "==3.7.5"
 pydantic = "==2.12.5"
 razdel = "==0.5.0"
 ru-core-news-lg = { url = "https://github.com/explosion/spacy-models/releases/download/ru_core_news_lg-3.7.0/ru_core_news_lg-3.7.0-py3-none-any.whl" }
 
-[tool.poetry.group.api.dependencies]
+[tool.poetry.group.api.dependencies]  # Отличное решение вынести эти зависимости из основных, чтобы не добавлять их в пакет `text_analyzer`. Молодец!
 fastapi = "==0.125.0"
-uvicorn = { version = "==0.38.0", extras = ["standard"] }
+uvicorn = { version = "==0.38.0", extras = ["standard"] } # Если вы не используете `fastapi[standard]`, то и для uvicorn это расширение не нужно
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "==4.5.0" # poetry run pre-commit install
 ruff = "==0.14.10"
-mypy = "==1.19.1"
+mypy = "==1.19.1"  # Почему вы устанавливаете mypy, но не настраиваете его? Вы точно его используете?
 
 [tool.poetry.group.test.dependencies]
-pytest = "==9.0.2"
+pytest = "==9.0.2"  # Настройте pytest, чтобы тесты запускались корректно при вызове `poetry run pytest`
 
-[tool.ruff]
+[tool.ruff]  # Почему не указана `target-version`?
 line-length = 120
 exclude = ['**/tests/**']
 
@@ -40,6 +48,7 @@ quote-style = 'double'
 # ruff check
 [tool.ruff.lint]
 select = [
+    # В production-проектах лучше избегайте таких подробных комментариев
     'F',    # Ошибки синтаксиса и выполнения (SyntaxError, NameError)
     'E',    # Стилевые ошибки по PEP 8 (отступы, пробелы вокруг операторов)
     'W',    # Предупреждения по PEP 8 (менее строгие, чем 'E' — например, избыточные пробелы)

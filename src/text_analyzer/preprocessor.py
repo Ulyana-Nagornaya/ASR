@@ -35,6 +35,8 @@ class Preprocessor:
                     self._spacy_model.meta.get("name", "unknown"),
                 )
             except Exception as e:
+                # (Совет) Используйте `logger.exception`, чтобы получить в консоли Traceback.
+                # Это бывает полезен при отладке
                 logger.error("Failed to load spacy model 'ru_core_news_lg': %s", e)
 
     def spacy_extract(self, sentence: str, features: dict[str, list[str]]) -> dict[str, Any]:
