@@ -1,5 +1,5 @@
 from text_analyzer.preprocessor import Preprocessor
-# Вы вынесли `Preprocessor` в `src/text_analyzer/__init__.py`, поэтому можете импортировать его прямо из `text_analyzer`
+# Вы вынесли `Preprocessor` в `text_analyzer/__init__.py`, поэтому можете импортировать его напрямую из `text_analyzer`
 
 def test_preprocessor_splits_text():
     text = "Привет, Мир! Как дела?"

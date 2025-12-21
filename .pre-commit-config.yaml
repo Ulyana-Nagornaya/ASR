@@ -1,3 +1,4 @@
+# В production-проектах лучше избегайте таких подробных комментариев
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit  # официальный репозиторий с хуками для ruff
     rev: v0.14.7   # версия хуков ruff-pre-commit
